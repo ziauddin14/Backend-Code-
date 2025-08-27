@@ -1,3 +1,4 @@
+// Class 01 Basics
 // console.log("Hello World!");
 // const num1 = 20
 // const num2 = 20
@@ -43,30 +44,47 @@ const server = http.createServer((req, res) => {
 server.listen(3000);
 console.log("Server Start....");
 */
+// Class 02 Express Basic
+// import express from "express";
+// import bodyParser from "body-parser";
+// const app = express();
+// app.use(bodyParser.urlencoded({ extended: false }));
+// // app.use((req, res, next) => {
+// //   console.log("Request Received");
+// //   req.data = "Zia Uddin is a Very Good Developer  and Teacher";
+// //   next();
+// // });
 
-import express from "express";
-import bodyParser from "body-parser";
-const app = express();
-app.use(bodyParser.urlencoded({ extended: false }));
-// app.use((req, res, next) => {
-//   console.log("Request Received");
-//   req.data = "Zia Uddin is a Very Good Developer  and Teacher";
-//   next();
+// app.get("/", (req, res) => {
+//   res.send("<h1>Hello World</h1>");
 // });
+// app.get("/form", (req, res) => {
+//   res.send(`
+//         <form action='/submit' method="POST">
+//         <input name="name" placeholder="Enter Your Name" />
+//         <button type="submit">Submit</button>
+//         </form>
+//         `);
+// });
+// app.post("/submit", (req, res) => {
+//   console.log(req.body);
+//   res.send("Data Recieved Successfully");
+// });
+// app.listen(3000);
 
-app.get("/", (req, res) => {
-  res.send("<h1>Hello World</h1>");
+// Class 03 Todo
+
+import express from 'express';
+import bodyParser from 'body-parser';
+import todoRoutes from './src/controller/routes/todo.js';
+const app = express();
+
+// Middleware
+app.use(bodyParser.json());
+
+// Routes
+app.use('/api', todoRoutes);
+app.listen(3000, () => {
+  console.log("Server is running on port 3000");
 });
-app.get("/form", (req, res) => {
-  res.send(`
-        <form action='/submit' method="POST">
-        <input name="name" placeholder="Enter Your Name" />
-        <button type="submit">Submit</button>
-        </form>
-        `);
-});
-app.post("/submit", (req, res) => {
-  console.log(req.body);
-  res.send("Data Recieved Successfully");
-});
-app.listen(3000);
+console.log("Server Start....");

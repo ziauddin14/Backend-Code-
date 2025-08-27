@@ -51,3 +51,7 @@ Node.js + Express.js Methods Used (Explanation):
 - DELETE → Server se data hata deta hai.
 - send() → Client ko jawab (response) bhejta hai.
 - Body-parser → Client se bheja gaya data (JSON ya form) ko read karke req.body mein easily access karne ke liye use hoti hai.
+- MVC Pattern: Code ko teen hisso mein divide karna—Model (data), View (user interface), aur Controller (logic)—taake code samajhna aur manage karna asaan ho jaye.
+- API: Application Programming Interface
+- Rest API: (Representational State Transfer) User ki demand k according Data laya jaye
+- GraphQL: Flexable API
