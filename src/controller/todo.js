@@ -21,9 +21,14 @@ const updateTodo = (req, res) => {
     }
 };
 const deleteTodo = (req, res) => {
-    const { id } = req.params;
-    const filterTodo = todos.filter((todo) => todo.id !== id);
-    res.send({ message: "Todo deleted successfully", todos: filterTodo });
+  const id = req.params.id;
+  const filterTodos = todos.filter((obj) => obj.id != id);
+  if (filterTodos.length !== todos.length) {
+    todos = filterTodos;
+    return res.send({ message: "Todos Deleted Successfully" });
+  } else {
+     return res.send({ message: "Id Not Matched" });
+  }
 };
 
 export { addTodo, getTodos, updateTodo, deleteTodo };

@@ -74,17 +74,18 @@ console.log("Server Start....");
 
 // Class 03 Todo
 
-import express from 'express';
-import bodyParser from 'body-parser';
-import todoRoutes from './src/controller/routes/todo.js';
+import express from "express";
+import bodyParser from "body-parser";
+import todoRoutes from "./src/routes/todo.js";
+import userRoutes from "./src/routes/user.js";
 const app = express();
 
 // Middleware
 app.use(bodyParser.json());
 
-// Routes
-app.use('/api', todoRoutes);
-app.listen(3000, () => {
-  console.log("Server is running on port 3000");
-});
-console.log("Server Start....");
+// Routes Middleware
+app.use("/api", todoRoutes);
+app.use("/api/user", userRoutes);
+
+app.listen(3000);
+console.log("Server Started");
