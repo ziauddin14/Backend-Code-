@@ -56,3 +56,5 @@ Node.js + Express.js Methods Used (Explanation):
 - Rest API: (Representational State Transfer) User ki demand k according Data laya jaye
 - GraphQL: Flexable API
 - Bcrypt Library: Ye ek library hai jo passwords ko encrypt (hash) karne ke liye use hoti hai taake wo secure ho jayein aur asaani se read na kiye ja sakein.
+- Thundar Client Request: Thunder Client open karo, 'New Request' pe click karo, URL daalo, method select karo (GET, POST, etc.), aur 'Send' button dabao."
+- JWT Library: Ye ek library hai jo user ko ek secure token deti hai taake user ki pehchan (authentication) server pe verify hosky.
