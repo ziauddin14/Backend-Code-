@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+const secretKey = "123456789abcdef"; // Ideally should be in env variable
 const users = [];
 
 const createUser = async (req, res) => {
@@ -45,9 +46,9 @@ const signinUser = (req, res) => {
     email: user.email,
     id: user.id,
   };
-  const secretKey = "your_secret_key";
+  const secretKey =  "123456789abcdef"; // Ideally should be in env variable
   const Options = {
-    expiresIn: "1h",
+    expiresIn: "1d",
   };
   const token = jwt.sign(payload, secretKey, Options);
   return res.send({
@@ -56,7 +57,7 @@ const signinUser = (req, res) => {
       name: user.name,
       email: user.email,
       id: user.id,
-      token: user.token,
+      token: token,
     },
   });
 };

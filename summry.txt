@@ -58,3 +58,44 @@ Node.js + Express.js Methods Used (Explanation):
 - Bcrypt Library: Ye ek library hai jo passwords ko encrypt (hash) karne ke liye use hoti hai taake wo secure ho jayein aur asaani se read na kiye ja sakein.
 - Thundar Client Request: Thunder Client open karo, 'New Request' pe click karo, URL daalo, method select karo (GET, POST, etc.), aur 'Send' button dabao."
 - JWT Library: Ye ek library hai jo user ko ek secure token deti hai taake user ki pehchan (authentication) server pe verify hosky.
+- App ko use krny k 2 tareeqy: 
+- Session Base : jb tk tab open h session chalta rhy ga 
+- Tokes Base : jb tk token delete ya expired nhi krdety wo chalta rhyga
+- Payload :
+- next() :mera kaam hogya ap aagy jaskty hyn
+- Middleware Roman Urdu Explanation:{
+  import jwt from "jsonwebtoken";
+→ Ye ek library hai jo JWT (JSON Web Token) kaam ke liye use hoti hai.
+
+const secretKey = "123456789abcdef";
+→ Ye ek secret password jaisa hai jo sirf server ko pata hota hai. Isse hum token ko verify karte hain.
+
+const authHeader = req.headers["authorization"];
+→ Jab koi request bhejta hai, uske sath ek Authorization header hota hai. Hum usko nikal rahe hain.
+
+if (!authHeader) {...}
+→ Agar request me token hai hi nahi to turant error bhej do: "Bhai pehle login karo".
+
+const token = authHeader.split(" ")[1];
+→ Authorization header ka format hota hai: "Bearer <token>". Hum usko tod ke sirf token le rahe hain.
+
+if (!token) {...}
+→ Agar token mil hi nahi raha to error bhejo: "Token missing hai".
+
+const decoded = jwt.verify(token, secretKey);
+→ Yahan hum token ko check kar rahe hain ki sahi hai ya nahi, aur agar sahi hai to uska data decode ho jata hai.
+
+req.user = decoded;
+→ Agar token sahi hai to hum user ka data request object me save kar lete hain taki aage use ho sake.
+
+next();
+→ Ye kehta hai ki "Bhai sab theek hai, ab agli file ya route pe jao".
+
+catch (err) {...}
+→ Agar token galat ya expire ho to error bhejo: "Invalid Token".
+
+export { verifyToken };
+→ Iska matlab hai hum ye function baaki jagah bhi use kar sakte hain.
+}
+- Axios: ek library hai jo browser ya Node.js se API requests bhejne aur data lene ka easy tareeqa deti hai.
+  
