@@ -78,6 +78,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import todoRoutes from "./src/routes/todo.js";
 import userRoutes from "./src/routes/user.js";
+import mongoose from "mongoose";
 const app = express();
 
 // Middleware
@@ -86,6 +87,9 @@ app.use(bodyParser.json());
 // Routes Middleware
 app.use("/api", todoRoutes);
 app.use("/api/user", userRoutes);
-
+mongoose
+  .connect('mongodb+srv://zu37216_db_user:ScmwkS4SMSsyHSRT@cluster0.le4pope.mongodb.net/')
+  .then(() => {console.log('Connect')})
+  .catch((error)=>{console.error('error', error)})
 app.listen(3000);
 console.log("Server Started");

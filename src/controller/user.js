@@ -1,7 +1,9 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import User from "../models/user.js";
 const secretKey = "123456789abcdef"; // Ideally should be in env variable
 const users = [];
+// DB Connection mongodb+srv://zu37216_db_user:ScmwkS4SMSsyHSRT@cluster0.le4pope.mongodb.net/
 
 const createUser = async (req, res) => {
   const { name, email, password } = req.body;

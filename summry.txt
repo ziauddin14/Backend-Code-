@@ -56,6 +56,7 @@ Node.js + Express.js Methods Used (Explanation):
 - Rest API: (Representational State Transfer) User ki demand k according Data laya jaye
 - GraphQL: Flexable API
 - Bcrypt Library: Ye ek library hai jo passwords ko encrypt (hash) karne ke liye use hoti hai taake wo secure ho jayein aur asaani se read na kiye ja sakein.
+- Thundar Client: Ek built in extension h jo API testimg ko within a VSCODE krny ki permission dedyta h .
 - Thundar Client Request: Thunder Client open karo, 'New Request' pe click karo, URL daalo, method select karo (GET, POST, etc.), aur 'Send' button dabao."
 - JWT Library: Ye ek library hai jo user ko ek secure token deti hai taake user ki pehchan (authentication) server pe verify hosky.
 - App ko use krny k 2 tareeqy: 
@@ -98,4 +99,8 @@ export { verifyToken };
 → Iska matlab hai hum ye function baaki jagah bhi use kar sakte hain.
 }
 - Axios: ek library hai jo browser ya Node.js se API requests bhejne aur data lene ka easy tareeqa deti hai.
+- NoSQL DB: performance jahan mater kry wahan use hoga Betarteeb hota h object fomr BSON(Binarey Object Notation) form men 
+- SQL DB: Relationship matter krti ho wahan use hota h ye ek tarteeb men hota h (Large Scale website use krti hyn) table form men hota h .
+- ODM : Object Data Modling ==> Ye JS k Built in method ki tarah kaam krti hyn bani hoi cheezyn rakhin hyn bs uthao laagalo hm yaahan par "mongoose" ko use kryn gyn
+- ORM: Object Relational Making
   
