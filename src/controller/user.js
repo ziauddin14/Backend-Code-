@@ -2,13 +2,12 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
 const secretKey = "123456789abcdef"; // Ideally should be in env variable
-const users = [];
 // DB Connection mongodb+srv://zu37216_db_user:ScmwkS4SMSsyHSRT@cluster0.le4pope.mongodb.net/
 
 const createUser = async (req, res) => {
   const { name, email, password } = req.body;
 
-  const isUserExist = users.find((obj) => obj.email === email);
+  const isUserExist = await User.findOne({email});
   if (isUserExist) {
     return res.send({
       message: `User already exists against this ${email}`,
@@ -23,22 +22,22 @@ const createUser = async (req, res) => {
     id: Date.now(),
     token: "",
   };
-  users.push(userObj);
+  await User.create(userObj)
   return res.send({
     message: `User created successfully`,
     user: userObj,
   });
 };
 
-const signinUser = (req, res) => {
+const signinUser = async (req, res) => {
   const { email, password } = req.body;
-  const user = users.find((obj) => obj.email === email);
+  const user = await User.findOne({email});
   if (!user) {
     return res.send({
       message: `User not found against this ${email}`,
     });
   }
-  const isPasswordMatch = bcrypt.compareSync(password, user.password);
+  const isPasswordMatch =  bcrypt.compareSync(password, user.password);
   if (!isPasswordMatch) {
     return res.send({
       message: `Invalid password`,
@@ -65,10 +64,10 @@ const signinUser = (req, res) => {
 };
 
 
-const getAllUsers = (req, res) => {
+const getAllUsers = async(req, res) => {
+  const allUser = await User.find({})
   return res.send({
-    message: `List of all users`,
-    users,
+   allUser
   });
 };
 export { createUser, signinUser, getAllUsers };
