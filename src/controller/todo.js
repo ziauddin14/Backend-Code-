@@ -1,34 +1,33 @@
-const todos = [];
+import Todo from "../models/todo.js";
 
-const addTodo = (req, res) => {
-    const { title, description } = req.body;
-    const newTodo = { id: Date.now(), title, description };
-    todos.push(newTodo);
-    return res.send({ message: "Todo added successfully", todo: newTodo });
-};
-const getTodos = (req, res) => {
-    return res.send({ message: "Todos retrieved successfully", todos });
-};
-const updateTodo = (req, res) => {
-    const { id } = req.params;
-    const { title, description } = req.body;
-    const todoIndex = todos.findIndex((todo) => todo.id === parseInt(id));
-    if (todoIndex !== -1) {
-        todos[todoIndex] = { id: parseInt(id), title, description };
-        res.status(200).json(todos[todoIndex]);
-    } else {
-        res.status(404).json({ message: "Todo not found" });
-    }
-};
-const deleteTodo = (req, res) => {
-  const id = req.params.id;
-  const filterTodos = todos.filter((obj) => obj.id != id);
-  if (filterTodos.length !== todos.length) {
-    todos = filterTodos;
-    return res.send({ message: "Todos Deleted Successfully" });
-  } else {
-     return res.send({ message: "Id Not Matched" });
-  }
+const addTodo = async (req, res) => {
+  const { name, age } = req.body;
+  const newRecord = {
+    name,
+    age,
+  };
+  await Todo.create(newRecord);
+  return res.send({ message: "Todo Saved Successfully" });
 };
 
-export { addTodo, getTodos, updateTodo, deleteTodo };
+const getAllTodo = async (_, res) => {
+  const allTodos = await Todo.find({});
+  return res.send({ todos: allTodos, message: "Todos Fetched Successfully" });
+};
+
+const deleteTodo = async (req, res) => {
+  const id = req.query.id;
+  await Todo.findByIdAndDelete(id);
+  return res.send({ message: "Todo Deleted Successfully" });
+};
+
+const updateTodo = async (req, res) => {
+  const { id, name, age } = req?.body;
+  await Todo.findByIdAndUpdate(id, {
+    name,
+    age,
+  });
+  return res.send({ message: "Todo Updated Successfully" });
+};
+
+export { addTodo, getAllTodo, deleteTodo, updateTodo };

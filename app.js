@@ -77,7 +77,7 @@ console.log("Server Start....");
 import express from "express";
 import bodyParser from "body-parser";
 import todoRoutes from "./src/routes/todo.js";
-import userRoutes from "./src/routes/user.js";
+// import userRoutes from "./src/routes/user.js";
 import mongoose from "mongoose";
 import dbConnection from "./src/lib/db.js";
 import dotenv from "dotenv"
@@ -92,7 +92,7 @@ app.use(bodyParser.json());
 
 // Routes Middleware
 app.use("/api", todoRoutes);
-app.use("/api/user", userRoutes);
+// app.use("/api/user", userRoutes);
 
   dbConnection().then(() => {
     app.listen(3000);
