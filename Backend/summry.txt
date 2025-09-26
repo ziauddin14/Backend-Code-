@@ -103,4 +103,4 @@ export { verifyToken };
 - SQL DB: Relationship matter krti ho wahan use hota h ye ek tarteeb men hota h (Large Scale website use krti hyn) table form men hota h .
 - ODM : Object Data Modling ==> Ye JS k Built in method ki tarah kaam krti hyn bani hoi cheezyn rakhin hyn bs uthao laagalo hm yaahan par "mongoose" ko use kryn gyn
 - ORM: Object Relational Making
-  
+- multer: Node.js ka ek midlleware h jo form data ko handle krti hai

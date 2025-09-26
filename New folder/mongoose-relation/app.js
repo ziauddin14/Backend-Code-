@@ -7,6 +7,14 @@ import dotenv from "dotenv";
 import { connectDB } from "./lib/db.js";
 import studentRoutes from "./routes/student.js";
 import courseRoutes from "./routes/course.js";
+import upload from "./middlewares/upload.js";
+import { v2 as cloudinary } from "cloudinary";
+
+cloudinary.config({
+  cloud_name: "dtwwqrywm",
+  api_key: "189349552473758",
+  api_secret: "fy6CsKr9WUkl_5MBF1eBEU7jlec",
+});
 
 dotenv.config({ path: "./.env" });
 
@@ -38,6 +46,22 @@ app.get("/", (req, res) => {
 });
 
 // your routes here
+
+app.post('/api/uploads', upload.single("userPhoto"), async (req, res) => {
+  try {
+    const {name} = req.body;
+    const userPhoto= req.file;
+    console.log('name', name);
+    const imageUpload = await cloudinary.uploader.upload(userPhoto?.path)
+    console.log('imageUpload', imageUpload);
+    res.send(`File uploaded successfully. URL: ${imageUpload.secure_url}`);
+  } catch (error) {
+    console.log(error);
+    res.send(error)
+  }
+});
+
+
 
 app.use(errorMiddleware);
 
