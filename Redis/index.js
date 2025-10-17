@@ -14,7 +14,7 @@ client.on('error', err => console.log('Redis Client Error', err));
 
 await client.connect();
 
-const app = express()
+const app = express()  
 const PORT = 5000
 
 const products = [
@@ -37,24 +37,24 @@ const products = [
 app.get("/products", async (req, res) => {
   try {
       const cacheProduct = await client.get("products")
-    if (cacheProduct) {
-        res.send({
-            message : "Products from redis",
-            data: JSON.parse(cacheProduct)
-        })
-    }
-    await client.setEx('products', 60, JSON.stringify(products))
-    res.send({
-        message: "Products from local array",
-        data: products
-    })
+      if (cacheProduct) {  
+          return res.send({
+              message : "Products from redis",
+              data: JSON.parse(cacheProduct)
+          })
+      }
+
+      await client.setEx('products', 60, JSON.stringify(products))
+      res.send({
+          message: "Products from local array",
+          data: products
+      })
   } catch (error) {
-    console.log(error);
-    
+      console.log(error);
+      res.status(500).send({ message: "Server Error" })
   }
-
-
 })
+
 app.listen(PORT , () => {
     console.log("Server is Running");
     
