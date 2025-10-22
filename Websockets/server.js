@@ -21,7 +21,6 @@
 //         });
 //     });
 
-
 //     ws.on('close', () => {
 //         clients.delete(ws);
 //         console.log('Client disconnected');
@@ -33,69 +32,122 @@
 
 // })
 
-//Socket.io ka server side code
+//Socket.io ka server side code 
+//on ==> listen
+//emit ==> send to all connected clients
+//broadcast.emit ==> send to all connected clients except the sender
 import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
 
 const app = express();
-const httpServer = createServer(app);
-const io = new Server(httpServer,{
-    cors: {
-        methods: [ "GET", "POST"],
-        origin: ["http://localhost:5173"],
-        credentials: true
-    }
+
+const server = createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
 });
-let users = [];
+
 const messages = [];
-const addUser = (username, socketId) => {
-    users.push({ username, id: socketId, createdAt: new Date.now() });
-    
-}
+let users = [];
+
+const addUser = (userName, socketId) => {
+  users.push({
+    userName,
+    id: socketId,
+    createdAt: Date.now(),
+  });
+};
 
 const removeUser = (socketId) => {
-    const filteredUsers = users.filter((user) => user.socketId !== socketId);
-    users = filteredUsers;
-}
-const getUser = () => users;
+  const filterUser = users?.filter(({ id }) => id !== socketId);
+  users = filterUser;
+};
+
+const getUsers = () => users;
 
 const addMessage = (message) => {
-    messages.push({...message, timeStamp: new Date.now()});
-}
-io.on('connection', (socket) => {
-    socket.on('join', (data) => {
-        const { username } = data;
-        //Validation
-        if (!username) return 'Username is required';
-        //Check for duplication
-        const isUserExists = users.find((user) => user.username === username);
-        if (isUserExists)   return 'Username is already taken';
-        //Add user
-        addUser(username, socket.id);
-        socket.emit('welcome', { message: `Welcome to the chat, ${username}`, users: getUser(),  });
-        socket.broadcast.emit('userJoined', { message: `${username} has joined the chat`, users: getUser() });
+  messages.push({
+    ...message,
+    timeStamp: Date.now(),
+  });
+};
+
+// on Listening Event
+// emit Sends to only that specific clients
+// socket.broadcast.emit() → Sends to all except the sender
+
+io.on("connection", (socket) => {
+  socket.on("join", (data) => {
+    const { username } = data;
+
+    if (!username) {
+      socket.emit("error", { message: "Username is required" });
+      return;
+    }
+
+    const existingUser = users.find(
+      (user) => user.username.toLowerCase() === username.toLowerCase()
+    );
+
+    if (existingUser) {
+      socket.emit("error", { message: "Username is already taken" });
+      return;
+    }
+
+    addUser(socket.id, username.trim());
+
+    socket.emit("joined", {
+      message: `Welcome to the chat, ${username}!`,
+      users: getUsers(),
+      recentMessages: messages.slice(-20),
     });
-    //Send message
-    socket.on('message', (data) => {
-        const {username} = data;
-        const user = users.find((user) => user.username === username);
-        if(!user) return 'Please join the chat to send messages';
-        const objectMessage = {
-            ...messages,
-            username,
-            id: socket.id,
-        }
-        addMessage(objectMessage);
-        io.broadcast.emit('message', objectMessage);
+
+    socket.broadcast.emit("userJoined", {
+      message: `${username} joined the chat`,
+      users: getUsers(),
     });
+  });
+
+  socket.on("sendMessage", (data) => {
+    const user = users.find((u) => u.id === socket.id);
+
+    if (!user) {
+      socket.emit("error", { message: "You must join first" });
+      return;
+    }
+
+    const { message } = data;
+
+    if (!message || message.trim() === "") {
+      socket.emit("error", { message: "Message cannot be empty" });
+      return;
+    }
+
+    const newMessage = {
+      username: user.username,
+      message: message.trim(),
+      socketId: socket.id,
+    };
+
+    addMessage(newMessage);
+
+    socket.emit("newMessage", {
+      ...newMessage,
+      timeStamp: Date.now(),
+    });
+  });
+
+  socket.on("disconnect", () => {
+    removeUser(socket.id);
+  });
 });
 
-const PORT = 2000;
-httpServer.listen(PORT, () => {
-    console.log('Server is starting on port', PORT);
-});
+const PORT = 3000;
 
-//on ==> listen
-//emit ==> send to all connected clients
-//broadcast.emit ==> send to all connected clients except the sender
+server.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
